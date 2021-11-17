@@ -160,7 +160,6 @@ namespace calculatrice
             var element_pressed = (Button)sender;
             string tmp = screen_display.Text;
             screen_display.Text = tmp + element_pressed.Content;
-
         }
         private void Add_before(object sender, RoutedEventArgs e)
         {
