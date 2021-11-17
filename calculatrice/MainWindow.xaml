@@ -13,8 +13,8 @@
 			<ColumnDefinition Width="279.202"/>
 			<ColumnDefinition Width="450"/>
 		</Grid.ColumnDefinitions>
-		<Button Content="&lt;-" Width="89" Height="50" HorizontalAlignment="Left" Margin="217,96,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-		<Button Content="CE" Width="89" Height="50" HorizontalAlignment="Left" Margin="128,96,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217"/>
+        <Button Content="&lt;-" Width="89" Height="50" HorizontalAlignment="Left" Margin="217,96,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Click="Erase_content_char"/>
+        <Button Content="CE" Width="89" Height="50" HorizontalAlignment="Left" Margin="128,96,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217" Click="Erase_content_CE"/>
 		<Button Content="C" Width="89" Height="50" HorizontalAlignment="Left" Margin="39,96,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217" Click="Erase_content"/>
 		<Button Content="7" Width="89" Height="51" HorizontalAlignment="Left" Margin="41,146,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217" Click="Add_next" Background="#FF4B4A4A" Foreground="White" BorderBrush="Black"/>
 		<Button Content="9" Width="89" Height="51" HorizontalAlignment="Left" Margin="217,146,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217" Click="Add_next" Background="#FF4B4A4A" Foreground="White" BorderBrush="Black" Grid.ColumnSpan="2"/>
@@ -23,7 +23,7 @@
 		<Button Content="4" Width="89" Height="50" HorizontalAlignment="Left" Margin="41,197,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217" Click="Add_next" Background="#FF4B4A4A" Foreground="White" BorderBrush="Black"/>
 		<Button Content="1" Width="89" Height="51" HorizontalAlignment="Left" Margin="41,247,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217" Click="Add_next" Background="#FF4B4A4A" Foreground="White" BorderBrush="Black"/>
 		<Button Content="0" Width="89" Height="50" HorizontalAlignment="Left" Margin="130,298,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217" Click="Add_next" Background="#FF4B4A4A" Foreground="White" BorderBrush="Black"/>
-		<Button Content="+/-" Width="89" Height="50" HorizontalAlignment="Left" Margin="41,298,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217" Click="Add_before"/>
+        <Button Content="+/-" Width="89" Height="50" HorizontalAlignment="Left" Margin="41,298,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217" Click="Plus_Moins"/>
 		<Button Content="," Width="89" Height="50" HorizontalAlignment="Left" Margin="219,298,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217" Click="Add_next" Grid.ColumnSpan="2"/>
 		<Button Content="+" Width="89" Height="51" HorizontalAlignment="Left" Margin="85,247,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217" Click="Operators_click" Foreground="#FFB20404" FontSize="16" Grid.Column="1"/>
 		<Button Content="-" Width="89" Height="50" HorizontalAlignment="Left" Margin="85,197,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,0.217" Click="Operators_click" Foreground="#FFB20404" FontSize="16" Grid.Column="1"/>

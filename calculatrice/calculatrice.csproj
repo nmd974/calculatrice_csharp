@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>171352_calculator_icon.ico</ApplicationIcon>
   </PropertyGroup>
 
 </Project>
