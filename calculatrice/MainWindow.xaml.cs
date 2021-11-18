@@ -117,17 +117,19 @@ namespace calculatrice
                 if (context == "equal")
                 {
                     this.reset_after_equal = true;
-                    screen_display.Text = this.result.ToString();
                     this.dataa.Add(this.result.ToString());
                     screen_display_historic.Text = "";
                 }
                 else
                 {
-                    this.historic.Clear();
-                    screen_display.Text = this.result.ToString();
-                    this.historic.Add(this.result.ToString());
+                    //this.historic.Clear();
+                    
+                    Debug.WriteLine(this.result.ToString());
+                    screen_display_historic.Text = "";
+                    //this.historic.Add(this.result.ToString());
                     this.dataa.Add(this.result.ToString());
                 }
+                screen_display.Text = this.result.ToString();
             }
 
             foreach (string element in this.historic)
@@ -144,6 +146,11 @@ namespace calculatrice
         /// <param name="e"></param>
         private void Add_next(object sender, RoutedEventArgs e)
         {
+            //Si enchainement de calculs et que l'utilisateur souhaite ajouter un chiffre
+            if (this.historic.Count() > 2)
+            {
+                Clear_Screen();
+            }
             //On ajoute le contenu des chiffres sur lequel on clique si c'est 0 en tout début alors on ne fait rien || si nombre deja en decimal et clic sur decimal alors on ajoute pas
             var element_pressed = (Button)sender;
             if((element_pressed.Content.ToString() == "0" && screen_display.Text == "") || (screen_display.Text.Contains(",") && element_pressed.Content.ToString() == ","))
@@ -155,6 +162,7 @@ namespace calculatrice
                 string tmp = screen_display.Text;
                 screen_display.Text = tmp + element_pressed.Content;
             }
+
 
         }
         /// <summary>
@@ -217,7 +225,12 @@ namespace calculatrice
                         Render_Screen();
                         this.operation_to_execute = element_pressed.Content.ToString();
                     }
-                    Clear_Screen();
+                    //On ne supprime pas l'affichage en cours de saisi s'il s'agit d'un enchaînement de calculs
+                    if(this.historic.Count() < 3)
+                    {
+                        Clear_Screen();
+                    }
+                    
                 }
             }           
         }
@@ -247,6 +260,13 @@ namespace calculatrice
             {
                 int limit = tmp.Length - 1;
                 screen_display.Text = tmp.Substring(0, limit);
+            }
+            //Permet de supprimer l'ancienne valeur après un égal
+            if (this.reset_after_equal)
+            {
+                this.dataa.Clear();
+                this.reset_after_equal = false;
+                this.historic.Clear();
             }
         }
 
