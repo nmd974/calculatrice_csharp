@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Diagnostics;
+using System.Windows.Input;
 
 namespace calculatrice
 {
@@ -11,97 +12,95 @@ namespace calculatrice
      * Récupérer toutes les valeurs saisies 
      * Si clic sur autre que chiffres alors on ajoute dans le tableau et on ajoute l'opérateur
      * 
-     * 
+     *         //Ajouter la possibilité d'executer des calculs si on a la licence ==> inscription sur appli et générer une clef que l'on save sur l'outil de l'utilisateur
+        //Ajouter un menu qui apparaît quand on appuie sur alt
+    Bug quand on appuie sur égal et que l'on ajoute une virgule au resultat, ce n'est pas pris en compte
      */
 
     public partial class MainWindow : Window
     {
-        public Int64 data_int;
-        public decimal data_decimal;
-        public List<string> dataa = new List<string>();
-        public List<string> historic = new List<string>();
-        public string operation_to_execute = null;
-        public bool decimal_activated = false;
-        public bool reset_after_equal = false;
-        public bool negate_number = false;
+        //Todo on peut envisager l'affichage d'un historique complet (tous les calculs et non uniquement le précédent)
+
+        public double result; //Stocke le dernier résultat d'une opération
+        public List<string> dataa = new List<string>(); //Permet de stocker les 2 valeurs à calculer
+        public List<string> historic = new List<string>(); //Permet de gérer l'historique à afficher en haut
+        public bool reset_after_equal = false; //Permet dérer l'affichage s'il y a eu l'appuie sur =
+        public bool negate_number = false; //Gère le comportement du +/- 
+        public string operation_to_execute = null; //Indique quelle est l'opération à effectuer
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        //Mettre le blocage si division par 0
+        //private void DispatchActions(object sender, KeyEventArgs e)
+        //{
+        //    switch (e.Key)
+        //    {
+        //        case Key.NumPad0:
+        //            Add_next(sender, new RoutedEventArgs());
+        //            break;
+        //        case Key.NumPad1:
+        //            Add_next(element_pressed, new RoutedEventArgs());
+        //            break;
+        //        case Key.NumPad2:
+        //            Add_next(element_pressed, new RoutedEventArgs());
+        //            break;
+        //        case Key.NumPad3:
+        //            Add_next(element_pressed, new RoutedEventArgs());
+        //            break;
+        //        case Key.NumPad4:
+        //            Add_next(element_pressed, new RoutedEventArgs());
+        //            break;
+        //        case Key.NumPad5:
+        //            Add_next(element_pressed, new RoutedEventArgs());
+        //            break;
+        //        case Key.NumPad6:
+        //            Add_next(element_pressed, new RoutedEventArgs());
+        //            break;
+        //        case Key.NumPad7:
+        //            Add_next(element_pressed, new RoutedEventArgs());
+        //            break;
+        //        case Key.NumPad8:
+        //            Add_next(element_pressed, new RoutedEventArgs());
+        //            break;
+        //        case Key.NumPad9:
+        //            Add_next(element_pressed, new RoutedEventArgs());
+        //            break;
+
+        //    }
+        //}
+        /// <summary>
+        /// Réalise un calcul suite au déclenchement dans le render screen 
+        /// </summary>
         private void Calculate()
         {
-            foreach (string number in this.dataa)
+            switch (this.operation_to_execute)
             {
-                string[] split_element = number.Split(",");
-                if(split_element.Count() > 1)
-                {
-                    this.decimal_activated = true;
-                }
-            }
-            if (this.operation_to_execute == "/")
-            {
-                if (this.decimal_activated)
-                {
-                    this.data_decimal = decimal.Parse(this.dataa[0]) / decimal.Parse(this.dataa[1]);
-                }
-                else
-                {
-                    //Debug.WriteLine("Modulo" + Int64.Parse(this.dataa[0]) % Int64.Parse(this.dataa[1]));
-                    if(Int64.Parse(this.dataa[0]) % Int64.Parse(this.dataa[1]) > 0)
+                case "/":
+                    if(double.Parse(this.dataa[1]) != 0)
                     {
-                        this.decimal_activated = true;
-                        this.data_decimal = decimal.Parse(this.dataa[0]) / decimal.Parse(this.dataa[1]);
+                        this.result = double.Parse(this.dataa[0]) / double.Parse(this.dataa[1]);
                     }
-                    else
+                    break;
+                case "*":
+                    this.result = double.Parse(this.dataa[0]) * double.Parse(this.dataa[1]);
+                    break;
+                case "-":
+                    this.result = double.Parse(this.dataa[0]) - double.Parse(this.dataa[1]);
+                    break;
+                default:
+                    foreach (string element in this.dataa)
                     {
-                        this.data_int = Int64.Parse(this.dataa[0]) / Int64.Parse(this.dataa[1]);
+                        Debug.WriteLine(element);
                     }
-                }
+                    
+                    this.result = double.Parse(this.dataa[0]) + double.Parse(this.dataa[1]);
+                    break;
             }
-            else if (this.operation_to_execute == "*")
-            {
-                if (this.decimal_activated)
-                {
-                    this.data_decimal = decimal.Parse(this.dataa[0]) * decimal.Parse(this.dataa[1]);
-                }
-                else
-                {
-                    this.data_int = Int64.Parse(this.dataa[0]) * Int64.Parse(this.dataa[1]);
-                }
-            }
-            else if (this.operation_to_execute == "-")
-            {
-                if (this.decimal_activated)
-                {
-                    this.data_decimal = decimal.Parse(this.dataa[0]) - decimal.Parse(this.dataa[1]);
-                }
-                else
-                {
-                    this.data_int = Int64.Parse(this.dataa[0]) - Int64.Parse(this.dataa[1]);
-                }
-            }
-            else
-            {
-                if (this.decimal_activated)
-                {
-                    this.data_decimal = decimal.Parse(this.dataa[0]) + decimal.Parse(this.dataa[1]);
-                }
-                else
-                {
-                    this.data_int = Int64.Parse(this.dataa[0]) + Int64.Parse(this.dataa[1]);
-                }
-            }
-
+            
             this.operation_to_execute = null;
         }
-
-        //Le retour en arriere enleve juste le 1er char et le ce enleve toute la saisie en cours
-        //Gerer le 0 devant les chiffres
-        //Gerer le +/-
-        //Ajouter la possibilité d'executer des calculs si on a la licence ==> inscription sur appli et générer une clef que l'on save sur l'outil de l'utilisateur
-        //Ajouter un menu qui apparaît quand on appuie sur alt
 
         private void Render_Screen(string context = "")
         {
@@ -118,34 +117,16 @@ namespace calculatrice
                 if (context == "equal")
                 {
                     this.reset_after_equal = true;
-                    if (this.decimal_activated)
-                    {
-                        screen_display.Text = this.data_decimal.ToString();
-                        this.dataa.Add(this.data_decimal.ToString());
-                    }
-                    else
-                    {
-                        screen_display.Text = this.data_int.ToString();
-                        this.dataa.Add(this.data_int.ToString());
-                    }
-
+                    screen_display.Text = this.result.ToString();
+                    this.dataa.Add(this.result.ToString());
                     screen_display_historic.Text = "";
                 }
                 else
                 {
                     this.historic.Clear();
-                    if (this.decimal_activated)
-                    {
-                        screen_display.Text = this.data_decimal.ToString();
-                        this.historic.Add(this.data_decimal.ToString());
-                        this.dataa.Add(this.data_decimal.ToString());
-                    }
-                    else
-                    {
-                        screen_display.Text = this.data_int.ToString();
-                        this.historic.Add(this.data_int.ToString());
-                        this.dataa.Add(this.data_int.ToString());
-                    }
+                    screen_display.Text = this.result.ToString();
+                    this.historic.Add(this.result.ToString());
+                    this.dataa.Add(this.result.ToString());
                 }
             }
 
@@ -154,48 +135,32 @@ namespace calculatrice
                 string tmp = screen_display_historic.Text;
                 screen_display_historic.Text = tmp + element;
             }
-            foreach (string test in this.dataa)
-            {
-                Debug.WriteLine(test);
-            }
-            Debug.WriteLine("END");
         }
 
         /// <summary>
-        /// Ajoute les chiffres et +/- saisis par l'utilisateur
+        /// Ajoute les chiffres saisis par l'utilisateur
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Add_next(object sender, RoutedEventArgs e)
         {
-            //On ajoute le contenu des chiffres sur lequel on clique si c'est 0 en tout début alors on ne fait rien
+            //On ajoute le contenu des chiffres sur lequel on clique si c'est 0 en tout début alors on ne fait rien || si nombre deja en decimal et clic sur decimal alors on ajoute pas
             var element_pressed = (Button)sender;
-            if(element_pressed.Content.ToString() == "0" && screen_display.Text == "")
+            if((element_pressed.Content.ToString() == "0" && screen_display.Text == "") || (screen_display.Text.Contains(",") && element_pressed.Content.ToString() == ","))
             {
-
+                //Ne rien faire
             }
             else
             {
                 string tmp = screen_display.Text;
                 screen_display.Text = tmp + element_pressed.Content;
-
-                //Si l'utilisateur a cliqué sur +/- avant d'écrire son numbre alors on ajoute le moins juste après l'ajout de son 1er chiffre
-                //if (this.negate_number && screen_display.Text != "")
-                //{
-                //    Add_before();
-                //}
             }
 
         }
-        private void Plus_Moins(object sender, RoutedEventArgs e)
-        {
-            Add_before();
-        }
         /// <summary>
-        /// Zone commentaires
-        /// 
+        /// Event listener du +/- qui permet d'ajouter le "-" ou pas devant le chiffre saisi
         /// </summary>
-        private void Add_before()
+        private void Plus_Moins(object sender, RoutedEventArgs e)
         {
             if (screen_display.Text != "")
             {
@@ -211,20 +176,19 @@ namespace calculatrice
                     this.negate_number = true;
                 }
             }
-            //else
-            //{
-            //    //Ici on gère si oui ou non le chiffre est négatif
-            //    this.negate_number = !this.negate_number;
-            //}
         }
-
+        /// <summary>
+        /// Event listener sur les operateurs
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Operators_click(object sender, RoutedEventArgs e)
         {
             var element_pressed = (Button)sender;
             //Verifier s'il y a déjà eu une valeur ajoutée sinon on ne fait rien
             if(screen_display.Text != "")
             {
-                //Si l'utilisateur a cliqué sur = alors on reset l'historique pour n'afficher que le résultat
+                //Si l'utilisateur a cliqué sur = alors on reset l'historique pour n'afficher que le résultat, sinon on ajoute au tableau dataa le nombre à calculer
                 if (this.reset_after_equal)
                 {
                     this.historic.Clear();
@@ -235,6 +199,8 @@ namespace calculatrice
                 }
                 this.historic.Add(screen_display.Text);
                 this.historic.Add(element_pressed.Content.ToString());
+
+                //Si l'utilisateur a appuyé sur égal alors le render screen sera différent
                 if (element_pressed.Content.ToString() == "=")
                 {
                     Render_Screen("equal");
@@ -256,7 +222,6 @@ namespace calculatrice
             }           
         }
 
-        //Gestion du si c'est 0 et qu'on appuie sur le point alors on prend en comtpe
 
         private void Equal_Click(object sender, RoutedEventArgs e)
         {
@@ -268,12 +233,11 @@ namespace calculatrice
         private void Erase_content(object sender, RoutedEventArgs e)
         {
             Clear_All_Screen();
-            this.decimal_activated = false;
             this.operation_to_execute = null;
             this.dataa.Clear();
             this.historic.Clear();
-            this.data_int = 0;
-            this.data_decimal = 0;
+            this.result = 0;
+            this.reset_after_equal = false;
         }
 
         private void Erase_content_char(object sender, RoutedEventArgs e)
@@ -291,13 +255,16 @@ namespace calculatrice
             if (this.reset_after_equal == true)
             {
                 Clear_All_Screen();
+                this.operation_to_execute = null;
+                this.dataa.Clear();
+                this.historic.Clear();
+                this.result = 0;
+                this.reset_after_equal = false;
             }
             else
             {
                 Clear_Screen();
             }
-            
-            
         }
 
         private void Clear_Screen()
