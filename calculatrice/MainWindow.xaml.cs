@@ -9,18 +9,12 @@ using System.Windows.Input;
 namespace calculatrice
 {
     /**
-     * Récupérer toutes les valeurs saisies 
-     * Si clic sur autre que chiffres alors on ajoute dans le tableau et on ajoute l'opérateur
-     * 
-     *         //Ajouter la possibilité d'executer des calculs si on a la licence ==> inscription sur appli et générer une clef que l'on save sur l'outil de l'utilisateur
-        //Ajouter un menu qui apparaît quand on appuie sur alt
-    Bug quand on appuie sur égal et que l'on ajoute une virgule au resultat, ce n'est pas pris en compte
+     * A la saisie des chiffres / nombres, la valeur est stockée dans le tableau dataa et historic
+     * Quand la taille du tableau historic > 2 alors on sait qu'il faudra calculer
      */
 
     public partial class MainWindow : Window
     {
-        //Todo on peut envisager l'affichage d'un historique complet (tous les calculs et non uniquement le précédent)
-
         public double result; //Stocke le dernier résultat d'une opération
         public List<string> dataa = new List<string>(); //Permet de stocker les 2 valeurs à calculer
         public List<string> historic = new List<string>(); //Permet de gérer l'historique à afficher en haut
@@ -33,6 +27,7 @@ namespace calculatrice
             InitializeComponent();
         }
 
+        //TODO keyDown listener
         //private void DispatchActions(object sender, KeyEventArgs e)
         //{
         //    switch (e.Key)
@@ -40,36 +35,10 @@ namespace calculatrice
         //        case Key.NumPad0:
         //            Add_next(sender, new RoutedEventArgs());
         //            break;
-        //        case Key.NumPad1:
-        //            Add_next(element_pressed, new RoutedEventArgs());
-        //            break;
-        //        case Key.NumPad2:
-        //            Add_next(element_pressed, new RoutedEventArgs());
-        //            break;
-        //        case Key.NumPad3:
-        //            Add_next(element_pressed, new RoutedEventArgs());
-        //            break;
-        //        case Key.NumPad4:
-        //            Add_next(element_pressed, new RoutedEventArgs());
-        //            break;
-        //        case Key.NumPad5:
-        //            Add_next(element_pressed, new RoutedEventArgs());
-        //            break;
-        //        case Key.NumPad6:
-        //            Add_next(element_pressed, new RoutedEventArgs());
-        //            break;
-        //        case Key.NumPad7:
-        //            Add_next(element_pressed, new RoutedEventArgs());
-        //            break;
-        //        case Key.NumPad8:
-        //            Add_next(element_pressed, new RoutedEventArgs());
-        //            break;
-        //        case Key.NumPad9:
-        //            Add_next(element_pressed, new RoutedEventArgs());
-        //            break;
-
         //    }
         //}
+
+
         /// <summary>
         /// Réalise un calcul suite au déclenchement dans le render screen 
         /// </summary>
@@ -123,8 +92,6 @@ namespace calculatrice
                 else
                 {
                     //this.historic.Clear();
-                    
-                    Debug.WriteLine(this.result.ToString());
                     screen_display_historic.Text = "";
                     //this.historic.Add(this.result.ToString());
                     this.dataa.Add(this.result.ToString());
